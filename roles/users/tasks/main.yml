@@ -1,0 +1,17 @@
+---
+- name: Manage user accounts
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | default(omit) }}"
+    append: true
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    state: "{{ item.state | default('present') }}"
+    create_home: true
+  loop: "{{ managed_users }}"
+- name: Install authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    key: "{{ item.ssh_key }}"
+    state: present
+  loop: "{{ managed_users }}"
+  when: item.ssh_key is defined and (item.state | default('present')) == 'present'

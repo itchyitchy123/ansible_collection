@@ -1,0 +1,7 @@
+---
+- name: Install PHP
+  ansible.builtin.package:
+    name: "{{ ['php'] + (php_extensions | map('regex_replace', '^', php_prefix) | list) }}"
+    state: present
+  vars:
+    php_prefix: "{{ 'php-' if ansible_facts.os_family == 'Debian' else 'php-' }}"

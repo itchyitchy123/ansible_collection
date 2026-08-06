@@ -1,0 +1,25 @@
+---
+- name: Configure application log rotation
+  hosts: linux
+  become: true
+  vars:
+    logrotate_paths: [/var/log/*.log]
+    logrotate_retention: 14
+  tasks:
+    - name: Install logrotate
+      ansible.builtin.package:
+        name: logrotate
+        state: present
+    - name: Write rotation policy
+      ansible.builtin.copy:
+        content: |
+          {{ logrotate_paths | join(' ') }} {
+            daily
+            rotate {{ logrotate_retention }}
+            compress
+            missingok
+            notifempty
+          }
+        dest: /etc/logrotate.d/opsforge
+        mode: "0644"
+

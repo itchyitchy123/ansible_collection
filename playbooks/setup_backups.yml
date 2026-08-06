@@ -1,0 +1,7 @@
+---
+- name: Set up backups
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.backups
+

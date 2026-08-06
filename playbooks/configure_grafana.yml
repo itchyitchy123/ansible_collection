@@ -1,0 +1,7 @@
+---
+- name: Configure Grafana
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.grafana
+

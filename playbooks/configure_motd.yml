@@ -1,0 +1,13 @@
+---
+- name: Configure message of the day
+  hosts: linux
+  become: true
+  vars:
+    motd_message: "Managed by Ansible - authorized access only."
+  tasks:
+    - name: Install MOTD
+      ansible.builtin.copy:
+        content: "{{ motd_message }}\n"
+        dest: /etc/motd
+        mode: "0644"
+

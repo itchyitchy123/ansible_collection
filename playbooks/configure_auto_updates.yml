@@ -1,0 +1,22 @@
+---
+- name: Configure automatic security updates
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Debian automatic updates
+      ansible.builtin.package:
+        name: unattended-upgrades
+        state: present
+      when: ansible_facts.os_family == 'Debian'
+    - name: Install RHEL automatic updates
+      ansible.builtin.package:
+        name: dnf-automatic
+        state: present
+      when: ansible_facts.os_family == 'RedHat'
+    - name: Enable RHEL automatic update timer
+      ansible.builtin.service:
+        name: dnf-automatic.timer
+        state: started
+        enabled: true
+      when: ansible_facts.os_family == 'RedHat'
+

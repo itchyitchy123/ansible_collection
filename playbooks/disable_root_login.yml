@@ -1,0 +1,9 @@
+---
+- name: Disable SSH root login
+  hosts: linux
+  become: true
+  vars:
+    ssh_permit_root_login: "no"
+  roles:
+    - opsforge.linux.ssh
+

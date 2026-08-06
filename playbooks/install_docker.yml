@@ -1,0 +1,7 @@
+---
+- name: Install Docker
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.docker
+

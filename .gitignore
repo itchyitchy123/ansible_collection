@@ -1,0 +1,5 @@
+*.tar.gz
+.ansible/
+.cache/
+__pycache__/
+*.retry

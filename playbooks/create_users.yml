@@ -1,0 +1,7 @@
+---
+- name: Create managed users
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.users
+

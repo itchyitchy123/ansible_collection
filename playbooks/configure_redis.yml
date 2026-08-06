@@ -1,0 +1,15 @@
+---
+- name: Configure Redis
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Redis
+      ansible.builtin.package:
+        name: "{{ 'redis-server' if ansible_facts.os_family == 'Debian' else 'redis' }}"
+        state: present
+    - name: Enable Redis
+      ansible.builtin.service:
+        name: "{{ 'redis-server' if ansible_facts.os_family == 'Debian' else 'redis' }}"
+        state: started
+        enabled: true
+

@@ -1,0 +1,14 @@
+---
+- name: Deploy static website
+  hosts: linux
+  become: true
+  vars:
+    static_site_source: files/site/
+    static_site_destination: /var/www/html
+  tasks:
+    - name: Copy website content
+      ansible.builtin.copy:
+        src: "{{ static_site_source }}"
+        dest: "{{ static_site_destination }}/"
+        mode: preserve
+

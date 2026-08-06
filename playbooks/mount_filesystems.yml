@@ -1,0 +1,22 @@
+---
+- name: Mount filesystems
+  hosts: linux
+  become: true
+  vars:
+    managed_mounts: []
+  tasks:
+    - name: Create mount points
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: "{{ item.mode | default('0755') }}"
+      loop: "{{ managed_mounts }}"
+    - name: Configure mounts
+      ansible.posix.mount:
+        path: "{{ item.path }}"
+        src: "{{ item.src }}"
+        fstype: "{{ item.fstype }}"
+        opts: "{{ item.opts | default('defaults') }}"
+        state: "{{ item.state | default('mounted') }}"
+      loop: "{{ managed_mounts }}"
+

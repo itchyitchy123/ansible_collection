@@ -1,0 +1,10 @@
+---
+- name: Install Node.js
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Node.js and npm
+      ansible.builtin.package:
+        name: [nodejs, npm]
+        state: present
+

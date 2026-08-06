@@ -1,0 +1,28 @@
+---
+- name: Install MariaDB and Python driver
+  ansible.builtin.package:
+    name: "{{ mariadb_packages }}"
+    state: present
+  vars:
+    mariadb_packages: "{{ ['mariadb-server', 'python3-pymysql'] if ansible_facts.os_family == 'Debian' else ['mariadb-server', 'python3-PyMySQL'] }}"
+- name: Enable MariaDB
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: true
+- name: Create databases
+  community.mysql.mysql_db:
+    name: "{{ item }}"
+    state: present
+    login_unix_socket: "{{ '/run/mysqld/mysqld.sock' if ansible_facts.os_family == 'Debian' else '/var/lib/mysql/mysql.sock' }}"
+  loop: "{{ mariadb_databases }}"
+- name: Create database users
+  community.mysql.mysql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.priv | default('*.*:USAGE') }}"
+    host: "{{ item.host | default('localhost') }}"
+    state: present
+    login_unix_socket: "{{ '/run/mysqld/mysqld.sock' if ansible_facts.os_family == 'Debian' else '/var/lib/mysql/mysql.sock' }}"
+  loop: "{{ mariadb_users }}"
+  no_log: true

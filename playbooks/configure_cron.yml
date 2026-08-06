@@ -1,0 +1,17 @@
+---
+- name: Configure scheduled jobs
+  hosts: linux
+  become: true
+  vars:
+    managed_cron_jobs: []
+  tasks:
+    - name: Manage cron jobs
+      ansible.builtin.cron:
+        name: "{{ item.name }}"
+        job: "{{ item.job }}"
+        minute: "{{ item.minute | default('0') }}"
+        hour: "{{ item.hour | default('*') }}"
+        user: "{{ item.user | default('root') }}"
+        state: "{{ item.state | default('present') }}"
+      loop: "{{ managed_cron_jobs }}"
+

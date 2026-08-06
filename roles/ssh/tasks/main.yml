@@ -1,0 +1,14 @@
+---
+- name: Install SSH server
+  ansible.builtin.package:
+    name: "{{ 'openssh-server' if ansible_facts.os_family == 'Debian' else 'openssh-server' }}"
+    state: present
+- name: Configure SSH safely
+  ansible.builtin.template:
+    src: hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/99-opsforge.conf
+    owner: root
+    group: root
+    mode: "0600"
+    validate: /usr/sbin/sshd -t -f %s
+  notify: Restart SSH

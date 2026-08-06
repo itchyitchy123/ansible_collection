@@ -1,0 +1,12 @@
+---
+- name: Install base packages
+  hosts: linux
+  become: true
+  vars:
+    base_packages: [curl, git, jq, rsync, unzip, vim]
+  tasks:
+    - name: Install base packages
+      ansible.builtin.package:
+        name: "{{ base_packages }}"
+        state: present
+

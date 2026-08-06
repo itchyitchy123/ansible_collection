@@ -1,0 +1,16 @@
+---
+- name: Update system packages
+  hosts: linux
+  become: true
+  tasks:
+    - name: Upgrade Debian packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+      when: ansible_facts.os_family == 'Debian'
+    - name: Upgrade RHEL packages
+      ansible.builtin.dnf:
+        name: '*'
+        state: latest
+      when: ansible_facts.os_family == 'RedHat'
+

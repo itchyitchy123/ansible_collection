@@ -1,0 +1,7 @@
+---
+- name: Configure Fail2Ban
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.fail2ban
+

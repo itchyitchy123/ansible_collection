@@ -1,0 +1,13 @@
+namespace: opsforge
+name: linux
+version: 1.0.0
+readme: README.md
+authors:
+  - OpsForge
+description: Reusable Linux operations roles and focused playbooks.
+license:
+  - MIT
+tags: [linux, infrastructure, security, monitoring, web]
+dependencies: {}
+repository: https://example.invalid/opsforge/linux
+build_ignore: [.git, .github, .ansible-lint]

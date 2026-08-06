@@ -1,0 +1,2 @@
+hardening_disable_core_dumps: true
+hardening_remove_packages: [telnet, rsh-client]

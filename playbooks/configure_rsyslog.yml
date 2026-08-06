@@ -1,0 +1,25 @@
+---
+- name: Configure remote logging
+  hosts: linux
+  become: true
+  vars:
+    rsyslog_remote_host: ""
+    rsyslog_remote_port: 514
+  tasks:
+    - name: Install rsyslog
+      ansible.builtin.package:
+        name: rsyslog
+        state: present
+    - name: Configure remote target
+      ansible.builtin.copy:
+        content: "*.* @@{{ rsyslog_remote_host }}:{{ rsyslog_remote_port }}\n"
+        dest: /etc/rsyslog.d/60-opsforge-remote.conf
+        mode: "0644"
+      when: rsyslog_remote_host | length > 0
+      notify: Restart rsyslog
+  handlers:
+    - name: Restart rsyslog
+      ansible.builtin.service:
+        name: rsyslog
+        state: restarted
+

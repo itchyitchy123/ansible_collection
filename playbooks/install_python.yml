@@ -1,0 +1,10 @@
+---
+- name: Install Python tooling
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Python packages
+      ansible.builtin.package:
+        name: [python3, python3-pip, python3-venv]
+        state: present
+

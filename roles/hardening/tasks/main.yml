@@ -1,0 +1,23 @@
+---
+- name: Remove insecure packages
+  ansible.builtin.package:
+    name: "{{ hardening_remove_packages }}"
+    state: absent
+- name: Apply secure kernel parameters
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: true
+  loop:
+    - {key: net.ipv4.conf.all.accept_redirects, value: '0'}
+    - {key: net.ipv4.conf.default.accept_redirects, value: '0'}
+    - {key: net.ipv4.conf.all.send_redirects, value: '0'}
+    - {key: net.ipv4.tcp_syncookies, value: '1'}
+    - {key: kernel.randomize_va_space, value: '2'}
+- name: Disable core dumps
+  ansible.builtin.copy:
+    content: "* hard core 0\n"
+    dest: /etc/security/limits.d/99-opsforge-hardening.conf
+    mode: "0644"
+  when: hardening_disable_core_dumps

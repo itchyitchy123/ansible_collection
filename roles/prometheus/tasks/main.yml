@@ -1,0 +1,10 @@
+---
+- name: Install Prometheus
+  ansible.builtin.package:
+    name: "{{ prometheus_package_name }}"
+    state: present
+- name: Enable Prometheus
+  ansible.builtin.service:
+    name: prometheus
+    state: started
+    enabled: true

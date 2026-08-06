@@ -1,0 +1,27 @@
+---
+- name: Require a secure WordPress database password
+  ansible.builtin.assert:
+    that: wordpress_db_password != 'change-me'
+    fail_msg: Set wordpress_db_password, preferably with Ansible Vault.
+- name: Download WordPress
+  ansible.builtin.get_url:
+    url: "{{ wordpress_url }}"
+    dest: /tmp/wordpress.tar.gz
+    mode: "0644"
+- name: Create WordPress directory
+  ansible.builtin.file:
+    path: "{{ wordpress_path }}"
+    state: directory
+    mode: "0755"
+- name: Extract WordPress
+  ansible.builtin.unarchive:
+    src: /tmp/wordpress.tar.gz
+    dest: "{{ wordpress_path }}"
+    remote_src: true
+    extra_opts: [--strip-components=1]
+    creates: "{{ wordpress_path }}/wp-settings.php"
+- name: Configure WordPress
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: "{{ wordpress_path }}/wp-config.php"
+    mode: "0640"

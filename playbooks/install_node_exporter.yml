@@ -1,0 +1,15 @@
+---
+- name: Install Prometheus node exporter
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install node exporter
+      ansible.builtin.package:
+        name: prometheus-node-exporter
+        state: present
+    - name: Enable node exporter
+      ansible.builtin.service:
+        name: prometheus-node-exporter
+        state: started
+        enabled: true
+

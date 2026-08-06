@@ -1,0 +1,13 @@
+---
+- name: Configure DNS resolvers
+  hosts: linux
+  become: true
+  vars:
+    dns_nameservers: [1.1.1.1, 9.9.9.9]
+  tasks:
+    - name: Configure resolv.conf
+      ansible.builtin.copy:
+        content: "{% for server in dns_nameservers %}nameserver {{ server }}\n{% endfor %}"
+        dest: /etc/resolv.conf
+        mode: "0644"
+

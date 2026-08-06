@@ -1,0 +1,7 @@
+---
+- name: Configure SSH
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.ssh
+

@@ -1,0 +1,16 @@
+---
+- name: Install Fail2Ban
+  ansible.builtin.package:
+    name: fail2ban
+    state: present
+- name: Configure Fail2Ban SSH jail
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    mode: "0644"
+  notify: Restart Fail2Ban
+- name: Enable Fail2Ban
+  ansible.builtin.service:
+    name: fail2ban
+    state: started
+    enabled: true

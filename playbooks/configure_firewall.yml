@@ -1,0 +1,7 @@
+---
+- name: Configure firewall
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.firewall
+

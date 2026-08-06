@@ -1,0 +1,4 @@
+backup_sources: [/etc]
+backup_destination: /var/backups/opsforge
+backup_schedule: "0 2 * * *"
+backup_retention_days: 14

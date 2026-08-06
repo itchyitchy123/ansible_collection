@@ -1,0 +1,32 @@
+---
+- name: Configure swap file
+  hosts: linux
+  become: true
+  vars:
+    swap_file: /swapfile
+    swap_size_mb: 2048
+  tasks:
+    - name: Allocate swap file
+      ansible.builtin.command: "fallocate -l {{ swap_size_mb }}M {{ swap_file }}"
+      args:
+        creates: "{{ swap_file }}"
+    - name: Secure swap file
+      ansible.builtin.file:
+        path: "{{ swap_file }}"
+        mode: "0600"
+    - name: Format swap file
+      ansible.builtin.command: "mkswap {{ swap_file }}"
+      when: ansible_swaptotal_mb < 1
+      changed_when: true
+    - name: Enable swap file
+      ansible.builtin.command: "swapon {{ swap_file }}"
+      when: ansible_swaptotal_mb < 1
+      changed_when: true
+    - name: Persist swap file
+      ansible.posix.mount:
+        path: none
+        src: "{{ swap_file }}"
+        fstype: swap
+        opts: sw
+        state: present
+

@@ -1,0 +1,10 @@
+---
+- name: Install Podman
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Podman
+      ansible.builtin.package:
+        name: podman
+        state: present
+

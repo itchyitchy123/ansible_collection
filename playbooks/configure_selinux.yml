@@ -1,0 +1,14 @@
+---
+- name: Configure SELinux
+  hosts: linux
+  become: true
+  vars:
+    selinux_state: enforcing
+    selinux_policy: targeted
+  tasks:
+    - name: Set SELinux policy
+      ansible.posix.selinux:
+        policy: "{{ selinux_policy }}"
+        state: "{{ selinux_state }}"
+      when: ansible_facts.os_family == 'RedHat'
+

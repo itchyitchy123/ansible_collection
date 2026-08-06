@@ -1,0 +1,14 @@
+---
+- name: Manage system services
+  hosts: linux
+  become: true
+  vars:
+    managed_services: []
+  tasks:
+    - name: Apply desired service states
+      ansible.builtin.service:
+        name: "{{ item.name }}"
+        state: "{{ item.state | default('started') }}"
+        enabled: "{{ item.enabled | default(true) }}"
+      loop: "{{ managed_services }}"
+

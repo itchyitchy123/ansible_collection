@@ -1,0 +1,10 @@
+---
+- name: Install Grafana package
+  ansible.builtin.package:
+    name: "{{ grafana_package_name }}"
+    state: present
+- name: Enable Grafana
+  ansible.builtin.service:
+    name: grafana-server
+    state: started
+    enabled: true

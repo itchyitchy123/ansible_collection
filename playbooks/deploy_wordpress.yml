@@ -1,0 +1,16 @@
+---
+- name: Deploy WordPress stack
+  hosts: linux
+  become: true
+  vars:
+    mariadb_databases: ["{{ wordpress_db_name | default('wordpress') }}"]
+    mariadb_users:
+      - name: "{{ wordpress_db_user | default('wordpress') }}"
+        password: "{{ wordpress_db_password }}"
+        priv: "{{ wordpress_db_name | default('wordpress') }}.*:ALL"
+  roles:
+    - opsforge.linux.apache
+    - opsforge.linux.mariadb
+    - opsforge.linux.php
+    - opsforge.linux.wordpress
+

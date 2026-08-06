@@ -1,0 +1,5 @@
+#!/bin/sh
+set -eu
+archive="{{ backup_destination }}/$(hostname)-$(date +%Y%m%d-%H%M%S).tar.gz"
+tar -czf "$archive"{% for source in backup_sources %} {{ source | quote }}{% endfor %}
+find {{ backup_destination | quote }} -type f -name '*.tar.gz' -mtime +{{ backup_retention_days }} -delete

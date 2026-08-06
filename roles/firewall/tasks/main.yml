@@ -1,0 +1,25 @@
+---
+- name: Install firewall backend
+  ansible.builtin.package:
+    name: "{{ 'ufw' if ansible_facts.os_family == 'Debian' else 'firewalld' }}"
+    state: present
+- name: Allow TCP ports with UFW
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ firewall_allowed_tcp_ports }}"
+  when: ansible_facts.os_family == 'Debian'
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+    policy: deny
+  when: ansible_facts.os_family == 'Debian'
+- name: Allow TCP ports with firewalld
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop: "{{ firewall_allowed_tcp_ports }}"
+  when: ansible_facts.os_family == 'RedHat'

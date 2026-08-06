@@ -1,0 +1,15 @@
+---
+- name: Configure time synchronization
+  hosts: linux
+  become: true
+  tasks:
+    - name: Install Chrony
+      ansible.builtin.package:
+        name: chrony
+        state: present
+    - name: Enable Chrony
+      ansible.builtin.service:
+        name: "{{ 'chrony' if ansible_facts.os_family == 'Debian' else 'chronyd' }}"
+        state: started
+        enabled: true
+

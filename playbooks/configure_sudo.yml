@@ -1,0 +1,19 @@
+---
+- name: Configure sudo access
+  hosts: linux
+  become: true
+  vars:
+    sudo_group: "{{ 'sudo' if ansible_facts.os_family == 'Debian' else 'wheel' }}"
+    sudo_passwordless: false
+  tasks:
+    - name: Install sudo
+      ansible.builtin.package:
+        name: sudo
+        state: present
+    - name: Configure administrative group
+      ansible.builtin.copy:
+        content: "%{{ sudo_group }} ALL=(ALL:ALL) {{ 'NOPASSWD: ' if sudo_passwordless else '' }}ALL\n"
+        dest: /etc/sudoers.d/opsforge-admins
+        mode: "0440"
+        validate: /usr/sbin/visudo -cf %s
+

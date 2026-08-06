@@ -1,0 +1,9 @@
+---
+- name: Harden Linux
+  hosts: linux
+  become: true
+  roles:
+    - opsforge.linux.hardening
+    - opsforge.linux.ssh
+    - opsforge.linux.fail2ban
+
