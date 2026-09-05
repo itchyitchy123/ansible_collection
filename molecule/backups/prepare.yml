@@ -5,5 +5,5 @@
   tasks:
     - name: Install cron prerequisite
       ansible.builtin.package:
-        name: cron
+        name: "{{ 'cron' if ansible_facts.os_family == 'Debian' else 'cronie' }}"
         state: present

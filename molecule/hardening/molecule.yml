@@ -4,13 +4,19 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: hardening-instance
+  - name: ubuntu-hardening
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     pre_build_image: true
     privileged: true
     command: '/bin/sh -c "while sleep 3600; do :; done"'
-    cgroupns_mode: private
-    network_mode: host
+  - name: almalinux-hardening
+    image: almalinux/9-init:9
+    pre_build_image: true
+    command: /sbin/init
+    privileged: true
+    cgroupns_mode: host
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
 provisioner:
   name: ansible
   config_options:

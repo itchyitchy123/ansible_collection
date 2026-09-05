@@ -30,9 +30,9 @@ jobs:
 
       - name: Build and install collection under test
         run: |
-          mkdir -p .ansible/collections
-          ansible-galaxy collection build --force --output-path .ansible
-          ansible-galaxy collection install .ansible/opsforge-linux-1.0.0.tar.gz -p .ansible/collections
+          mkdir -p .ansible/build .ansible/collections
+          ansible-galaxy collection build --force --output-path .ansible/build
+          ansible-galaxy collection install --force .ansible/build/*.tar.gz -p .ansible/collections
 
       - name: Lint YAML
         run: yamllint -c .yamllint .
@@ -75,9 +75,9 @@ jobs:
 
       - name: Build and install collection under test
         run: |
-          mkdir -p .ansible/collections
-          ansible-galaxy collection build --force --output-path .ansible
-          ansible-galaxy collection install .ansible/opsforge-linux-1.0.0.tar.gz -p .ansible/collections
+          mkdir -p .ansible/build .ansible/collections
+          ansible-galaxy collection build --force --output-path .ansible/build
+          ansible-galaxy collection install --force .ansible/build/*.tar.gz -p .ansible/collections
 
       - name: Run Molecule
         run: molecule test -s "${{ matrix.scenario }}"

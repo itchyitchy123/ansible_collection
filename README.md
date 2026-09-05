@@ -1,8 +1,10 @@
 # `opsforge.linux`
 
-[![CI](https://github.com/opsforge/linux/actions/workflows/ci.yml/badge.svg)](https://github.com/opsforge/linux/actions/workflows/ci.yml)
+[![CI](https://github.com/itchyitchy123/ansible_collection/actions/workflows/ci.yml/badge.svg)](https://github.com/itchyitchy123/ansible_collection/actions/workflows/ci.yml)
 
-An Ansible Collection containing reusable Linux roles and **36 focused playbooks**. It supports Debian/Ubuntu and RHEL-family hosts unless a playbook says otherwise.
+opsforge.linux — reusable Ansible roles and 36 playbooks for Linux provisioning, hardening, monitoring, and operations.
+
+It supports Debian/Ubuntu and RHEL-family hosts unless a playbook says otherwise.
 
 ## Install
 
@@ -17,9 +19,9 @@ ansible-galaxy collection install opsforge-linux-1.0.0.tar.gz
 Copy `inventory.example.ini`, create an inventory group named `linux`, then run one playbook:
 
 ```bash
-ansible-playbook -i inventory.ini opsforge.linux.install_apache
-ansible-playbook -i inventory.ini opsforge.linux.create_users -e '{managed_users: [{name: alice, groups: sudo, ssh_key: "ssh-ed25519 ..."}]}'
-ansible-playbook -i inventory.ini opsforge.linux.deploy_wordpress --ask-vault-pass
+ansible-playbook -i inventory.ini playbooks/install_apache.yml
+ansible-playbook -i inventory.ini playbooks/create_users.yml -e '{managed_users: [{name: alice, groups: sudo, ssh_key: "ssh-ed25519 ..."}]}'
+ansible-playbook -i inventory.ini playbooks/deploy_wordpress.yml --ask-vault-pass
 ```
 
 All playbooks use privilege escalation and are independently runnable. Review variables in `roles/*/defaults/main.yml`; keep passwords in Ansible Vault.
@@ -46,4 +48,4 @@ ansible-galaxy collection install -r requirements.yml -p .ansible/collections
 make yaml-lint lint syntax molecule
 ```
 
-Molecule currently covers the `users`, `backups`, and `hardening` roles in Ubuntu containers. The remaining roles can be added incrementally as their service-specific test requirements are defined.
+Molecule covers the `users`, `backups`, and `hardening` roles in Ubuntu 22.04 and AlmaLinux 9 containers. The remaining roles can be added incrementally as their service-specific test requirements are defined.

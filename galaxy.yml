@@ -4,10 +4,10 @@ version: 1.0.0
 readme: README.md
 authors:
   - OpsForge
-description: Reusable Linux operations roles and focused playbooks.
+description: "opsforge.linux — reusable Ansible roles and 36 playbooks for Linux provisioning, hardening, monitoring, and operations."
 license:
   - MIT
 tags: [linux, infrastructure, security, monitoring, web]
 dependencies: {}
-repository: https://example.invalid/opsforge/linux
+repository: https://github.com/itchyitchy123/ansible_collection
 build_ignore: [.git, .github, .ansible, .ansible-lint, .yamllint, molecule, requirements-dev.txt]
