@@ -1,0 +1,30 @@
+---
+- name: Verify users role
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather managed user information
+      ansible.builtin.getent:
+        database: passwd
+        key: molecule_user
+
+    - name: Check authorized key
+      ansible.builtin.stat:
+        path: /home/molecule_user/.ssh/authorized_keys
+      register: authorized_key
+
+    - name: Assert managed user and key exist
+      ansible.builtin.assert:
+        that:
+          - molecule_user in getent_passwd
+          - authorized_key.stat.exists
+
+    - name: Read authorized key
+      ansible.builtin.slurp:
+        src: /home/molecule_user/.ssh/authorized_keys
+      register: authorized_key_contents
+
+    - name: Assert expected key is installed
+      ansible.builtin.assert:
+        that:
+          - "'molecule@example' in (authorized_key_contents.content | b64decode)"

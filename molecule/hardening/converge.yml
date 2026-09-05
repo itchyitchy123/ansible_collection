@@ -1,0 +1,9 @@
+---
+- name: Converge hardening role
+  hosts: all
+  become: true
+  vars:
+    hardening_remove_packages: []
+    hardening_disable_core_dumps: true
+  roles:
+    - role: opsforge.linux.hardening

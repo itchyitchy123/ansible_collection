@@ -1,0 +1,26 @@
+---
+- name: Verify hardening role
+  hosts: all
+  become: true
+  tasks:
+    - name: Read core dump limits configuration
+      ansible.builtin.slurp:
+        src: /etc/security/limits.d/99-opsforge-hardening.conf
+      register: limits_configuration
+
+    - name: Read kernel parameters
+      ansible.builtin.command: sysctl -n {{ item }}
+      loop:
+        - net.ipv4.conf.all.accept_redirects
+        - net.ipv4.conf.default.accept_redirects
+        - net.ipv4.conf.all.send_redirects
+        - net.ipv4.tcp_syncookies
+        - kernel.randomize_va_space
+      register: sysctl_values
+      changed_when: false
+
+    - name: Assert hardening settings are applied
+      ansible.builtin.assert:
+        that:
+          - "'* hard core 0' in (limits_configuration.content | b64decode)"
+          - sysctl_values.results | map(attribute='stdout') | list == ['0', '0', '0', '1', '2']

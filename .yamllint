@@ -1,0 +1,16 @@
+---
+extends: default
+
+ignore: |
+  .ansible/
+  .cache/
+
+rules:
+  comments-indentation: disable
+  document-start: disable
+  empty-lines:
+    max: 1
+    max-end: 1
+  line-length: disable
+  truthy:
+    check-keys: false

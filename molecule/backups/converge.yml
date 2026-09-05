@@ -1,0 +1,12 @@
+---
+- name: Converge backups role
+  hosts: all
+  become: true
+  vars:
+    backup_sources:
+      - /etc/hostname
+    backup_destination: /var/backups/molecule
+    backup_schedule: "15 3 * * *"
+    backup_retention_days: 7
+  roles:
+    - role: opsforge.linux.backups

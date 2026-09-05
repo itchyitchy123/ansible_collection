@@ -11,13 +11,13 @@
     state: started
     enabled: true
 - name: Create databases
-  community.mysql.mysql_db:
+  ansible.mysql.mysql_db:
     name: "{{ item }}"
     state: present
     login_unix_socket: "{{ '/run/mysqld/mysqld.sock' if ansible_facts.os_family == 'Debian' else '/var/lib/mysql/mysql.sock' }}"
   loop: "{{ mariadb_databases }}"
 - name: Create database users
-  community.mysql.mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ item.name }}"
     password: "{{ item.password }}"
     priv: "{{ item.priv | default('*.*:USAGE') }}"

@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Lint and syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Install Ansible collection dependencies
+        run: ansible-galaxy collection install -r requirements.yml -p .ansible/collections
+
+      - name: Build and install collection under test
+        run: |
+          mkdir -p .ansible/collections
+          ansible-galaxy collection build --force --output-path .ansible
+          ansible-galaxy collection install .ansible/opsforge-linux-1.0.0.tar.gz -p .ansible/collections
+
+      - name: Lint YAML
+        run: yamllint -c .yamllint .
+
+      - name: Lint Ansible
+        run: ansible-lint --offline
+
+      - name: Check playbook syntax
+        run: |
+          for playbook in playbooks/*.yml; do
+            ansible-playbook --syntax-check -i inventory.example.ini "$playbook"
+          done
+
+  molecule:
+    name: Molecule (${{ matrix.scenario }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario:
+          - backups
+          - hardening
+          - users
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Install Ansible collection dependencies
+        run: ansible-galaxy collection install -r requirements.yml -p .ansible/collections
+
+      - name: Build and install collection under test
+        run: |
+          mkdir -p .ansible/collections
+          ansible-galaxy collection build --force --output-path .ansible
+          ansible-galaxy collection install .ansible/opsforge-linux-1.0.0.tar.gz -p .ansible/collections
+
+      - name: Run Molecule
+        run: molecule test -s "${{ matrix.scenario }}"

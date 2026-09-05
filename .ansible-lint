@@ -1,4 +1,7 @@
 profile: production
 exclude_paths:
   - .cache/
+  - .ansible/
 mock_roles: []
+skip_list:
+  - var-naming[no-role-prefix]

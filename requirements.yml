@@ -5,5 +5,7 @@ collections:
     version: ">=8.0.0"
   - name: community.mysql
     version: ">=3.7.0"
+  - name: ansible.mysql
+    version: ">=5.0.0"
   - name: community.docker
     version: ">=3.8.0"

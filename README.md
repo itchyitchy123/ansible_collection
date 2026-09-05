@@ -1,5 +1,7 @@
 # `opsforge.linux`
 
+[![CI](https://github.com/opsforge/linux/actions/workflows/ci.yml/badge.svg)](https://github.com/opsforge/linux/actions/workflows/ci.yml)
+
 An Ansible Collection containing reusable Linux roles and **36 focused playbooks**. It supports Debian/Ubuntu and RHEL-family hosts unless a playbook says otherwise.
 
 ## Install
@@ -33,3 +35,15 @@ All playbooks use privilege escalation and are independently runnable. Review va
 | Operations | `setup_backups`, `configure_chrony`, `configure_hostname`, `configure_dns`, `configure_swap`, `configure_motd`, `install_base_packages`, `update_packages`, `configure_auto_updates`, `manage_services`, `mount_filesystems`, `configure_cron` |
 
 See [docs/variables.md](docs/variables.md) for the main inputs.
+
+## Development
+
+Install the development dependencies and run the same checks used in CI:
+
+```bash
+python -m pip install -r requirements-dev.txt
+ansible-galaxy collection install -r requirements.yml -p .ansible/collections
+make yaml-lint lint syntax molecule
+```
+
+Molecule currently covers the `users`, `backups`, and `hardening` roles in Ubuntu containers. The remaining roles can be added incrementally as their service-specific test requirements are defined.

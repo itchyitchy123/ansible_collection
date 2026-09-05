@@ -10,4 +10,4 @@ license:
 tags: [linux, infrastructure, security, monitoring, web]
 dependencies: {}
 repository: https://example.invalid/opsforge/linux
-build_ignore: [.git, .github, .ansible-lint]
+build_ignore: [.git, .github, .ansible, .ansible-lint, .yamllint, molecule, requirements-dev.txt]

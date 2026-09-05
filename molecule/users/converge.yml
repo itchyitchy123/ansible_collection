@@ -1,0 +1,12 @@
+---
+- name: Converge users role
+  hosts: all
+  become: true
+  vars:
+    managed_users:
+      - name: molecule_user
+        groups: users
+        shell: /bin/bash
+        ssh_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMoleculeTestKey molecule@example
+  roles:
+    - role: opsforge.linux.users

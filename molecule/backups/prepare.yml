@@ -1,0 +1,9 @@
+---
+- name: Prepare backups role test
+  hosts: all
+  become: true
+  tasks:
+    - name: Install cron prerequisite
+      ansible.builtin.package:
+        name: cron
+        state: present

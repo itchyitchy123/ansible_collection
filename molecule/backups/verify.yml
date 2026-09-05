@@ -1,0 +1,28 @@
+---
+- name: Verify backups role
+  hosts: all
+  become: true
+  tasks:
+    - name: Inspect backup destination
+      ansible.builtin.stat:
+        path: /var/backups/molecule
+      register: backup_directory
+
+    - name: Inspect backup script
+      ansible.builtin.stat:
+        path: /usr/local/sbin/opsforge-backup
+      register: backup_script
+
+    - name: Read backup script
+      ansible.builtin.slurp:
+        src: /usr/local/sbin/opsforge-backup
+      register: backup_script_contents
+
+    - name: Assert backup files are installed securely
+      ansible.builtin.assert:
+        that:
+          - backup_directory.stat.exists
+          - backup_directory.stat.mode == '0700'
+          - backup_script.stat.exists
+          - backup_script.stat.mode == '0700'
+          - "'/etc/hostname' in (backup_script_contents.content | b64decode)"
