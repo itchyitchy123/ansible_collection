@@ -50,6 +50,8 @@ jobs:
   molecule:
     name: Molecule (${{ matrix.scenario }})
     runs-on: ubuntu-latest
+    env:
+      ANSIBLE_COLLECTIONS_PATHS: ${{ github.workspace }}/.ansible/collections
     strategy:
       fail-fast: false
       matrix:

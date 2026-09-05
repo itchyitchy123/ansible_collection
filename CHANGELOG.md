@@ -2,6 +2,10 @@
 
 All notable changes to this collection are recorded here.
 
+## 1.1.1
+
+- Make the collection-under-test path explicit in Molecule CI jobs.
+
 ## 1.1.0
 
 - Add Ubuntu 22.04 and AlmaLinux 9 Molecule coverage for representative roles.

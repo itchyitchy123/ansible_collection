@@ -13,7 +13,7 @@ packages require an external vendor or EPEL repository.
 ```bash
 ansible-galaxy collection install -r requirements.yml
 ansible-galaxy collection build
-ansible-galaxy collection install opsforge-linux-1.1.0.tar.gz
+ansible-galaxy collection install opsforge-linux-1.1.1.tar.gz
 ```
 
 ## Run
