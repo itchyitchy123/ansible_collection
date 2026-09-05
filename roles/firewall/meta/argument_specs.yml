@@ -1,0 +1,8 @@
+---
+argument_specs:
+  main:
+    short_description: Configure UFW or firewalld TCP rules.
+    options:
+      firewall_allowed_tcp_ports:
+        type: list
+        elements: int

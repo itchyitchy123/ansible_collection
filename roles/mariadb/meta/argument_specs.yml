@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    short_description: Install MariaDB and manage databases and users.
+    options:
+      mariadb_databases:
+        type: list
+        elements: str
+      mariadb_users:
+        type: list
+        elements: dict

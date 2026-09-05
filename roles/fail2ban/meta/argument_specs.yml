@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    short_description: Install Fail2Ban and configure its SSH jail.
+    options:
+      fail2ban_bantime:
+        type: str
+      fail2ban_findtime:
+        type: str
+      fail2ban_maxretry:
+        type: int

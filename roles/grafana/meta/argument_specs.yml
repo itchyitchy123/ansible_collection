@@ -1,0 +1,9 @@
+---
+argument_specs:
+  main:
+    short_description: Install Grafana from an approved repository.
+    options:
+      grafana_package_name:
+        type: str
+      grafana_repository_configured:
+        type: bool

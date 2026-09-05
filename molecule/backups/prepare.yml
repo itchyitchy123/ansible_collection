@@ -1,9 +1,0 @@
----
-- name: Prepare backups role test
-  hosts: all
-  become: true
-  tasks:
-    - name: Install cron prerequisite
-      ansible.builtin.package:
-        name: "{{ 'cron' if ansible_facts.os_family == 'Debian' else 'cronie' }}"
-        state: present

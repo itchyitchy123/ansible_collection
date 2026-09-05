@@ -1,0 +1,15 @@
+---
+- name: Verify SSH role
+  hosts: all
+  become: true
+  tasks:
+    - name: Inspect hardened SSH configuration
+      ansible.builtin.slurp:
+        src: /etc/ssh/sshd_config.d/99-opsforge.conf
+      register: ssh_configuration
+
+    - name: Assert hardened SSH settings are installed
+      ansible.builtin.assert:
+        that:
+          - "'PermitRootLogin no' in (ssh_configuration.content | b64decode)"
+          - "'PasswordAuthentication no' in (ssh_configuration.content | b64decode)"

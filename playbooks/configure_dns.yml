@@ -4,10 +4,16 @@
   become: true
   vars:
     dns_nameservers: [1.1.1.1, 9.9.9.9]
+    dns_manage_resolv_conf: false
   tasks:
+    - name: Explain DNS configuration safeguard
+      ansible.builtin.debug:
+        msg: Set dns_manage_resolv_conf=true to replace /etc/resolv.conf.
+      when: not dns_manage_resolv_conf | bool
     - name: Configure resolv.conf
       ansible.builtin.copy:
         content: "{% for server in dns_nameservers %}nameserver {{ server }}\n{% endfor %}"
         dest: /etc/resolv.conf
         mode: "0644"
-
+        backup: true
+      when: dns_manage_resolv_conf | bool

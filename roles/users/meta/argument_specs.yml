@@ -1,0 +1,8 @@
+---
+argument_specs:
+  main:
+    short_description: Manage local users and optional SSH keys.
+    options:
+      managed_users:
+        type: list
+        elements: dict

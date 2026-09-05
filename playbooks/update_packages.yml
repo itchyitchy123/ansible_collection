@@ -2,6 +2,13 @@
 - name: Update system packages
   hosts: linux
   become: true
+  vars:
+    package_update_confirmed: false
+  pre_tasks:
+    - name: Require explicit package update acknowledgement
+      ansible.builtin.assert:
+        that: package_update_confirmed | bool
+        fail_msg: Set package_update_confirmed=true after scheduling a maintenance window.
   tasks:
     - name: Upgrade Debian packages
       ansible.builtin.apt:

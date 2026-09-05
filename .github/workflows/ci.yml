@@ -32,7 +32,8 @@ jobs:
         run: |
           mkdir -p .ansible/build .ansible/collections
           ansible-galaxy collection build --force --output-path .ansible/build
-          ansible-galaxy collection install --force .ansible/build/*.tar.gz -p .ansible/collections
+          collection_version=$(awk '/^version:/ { print $2; exit }' galaxy.yml)
+          ansible-galaxy collection install --force ".ansible/build/opsforge-linux-${collection_version}.tar.gz" -p .ansible/collections
 
       - name: Lint YAML
         run: yamllint -c .yamllint .
@@ -55,7 +56,9 @@ jobs:
         scenario:
           - backups
           - hardening
+          - ssh
           - users
+          - wordpress
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -77,7 +80,8 @@ jobs:
         run: |
           mkdir -p .ansible/build .ansible/collections
           ansible-galaxy collection build --force --output-path .ansible/build
-          ansible-galaxy collection install --force .ansible/build/*.tar.gz -p .ansible/collections
+          collection_version=$(awk '/^version:/ { print $2; exit }' galaxy.yml)
+          ansible-galaxy collection install --force ".ansible/build/opsforge-linux-${collection_version}.tar.gz" -p .ansible/collections
 
       - name: Run Molecule
         run: molecule test -s "${{ matrix.scenario }}"

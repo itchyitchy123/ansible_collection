@@ -1,4 +1,10 @@
 ---
+- name: Require approved Grafana repository
+  ansible.builtin.assert:
+    that: grafana_repository_configured | bool
+    fail_msg: >-
+      Configure and approve the Grafana vendor repository, then set
+      grafana_repository_configured=true.
 - name: Install Grafana package
   ansible.builtin.package:
     name: "{{ grafana_package_name }}"

@@ -1,2 +1,2 @@
-apache_port: 80
-apache_server_admin: webmaster@localhost
+# This role intentionally manages only the packaged Apache service. Site and
+# virtual-host configuration belongs in a consuming deployment role.

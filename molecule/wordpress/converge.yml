@@ -1,0 +1,21 @@
+---
+- name: Converge WordPress role
+  hosts: all
+  become: true
+  pre_tasks:
+    - name: Calculate fixture checksum
+      ansible.builtin.stat:
+        path: /tmp/wordpress-fixture.tar.gz
+        checksum_algorithm: sha256
+      register: wordpress_fixture
+  roles:
+    - role: opsforge.linux.wordpress
+      vars:
+        wordpress_path: /var/www/molecule-wordpress
+        wordpress_db_name: molecule_wordpress
+        wordpress_db_user: molecule_user
+        wordpress_db_password: molecule-password
+        wordpress_db_host: database.internal
+        wordpress_version: "fixture-1"
+        wordpress_url: file:///tmp/wordpress-fixture.tar.gz
+        wordpress_checksum: "{{ wordpress_fixture.stat.checksum }}"

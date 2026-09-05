@@ -1,0 +1,10 @@
+---
+argument_specs:
+  main:
+    short_description: Apply baseline kernel and core-dump hardening.
+    options:
+      hardening_disable_core_dumps:
+        type: bool
+      hardening_remove_packages:
+        type: list
+        elements: str

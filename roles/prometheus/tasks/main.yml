@@ -1,4 +1,10 @@
 ---
+- name: Require approved Prometheus repository
+  ansible.builtin.assert:
+    that: prometheus_repository_configured | bool
+    fail_msg: >-
+      Configure and approve a repository providing Prometheus, then set
+      prometheus_repository_configured=true.
 - name: Install Prometheus
   ansible.builtin.package:
     name: "{{ prometheus_package_name }}"

@@ -1,10 +1,10 @@
 namespace: opsforge
 name: linux
-version: 1.0.0
+version: 1.1.0
 readme: README.md
 authors:
   - OpsForge
-description: "opsforge.linux — reusable Ansible roles and 36 playbooks for Linux provisioning, hardening, monitoring, and operations."
+description: "opsforge.linux — reusable Ansible roles and 37 playbooks for Linux provisioning, hardening, monitoring, and operations."
 license:
   - MIT
 tags: [linux, infrastructure, security, monitoring, web]

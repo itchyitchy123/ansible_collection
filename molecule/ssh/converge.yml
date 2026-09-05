@@ -1,0 +1,10 @@
+---
+- name: Converge SSH role
+  hosts: all
+  become: true
+  vars:
+    ssh_hardening_confirmed: true
+    ssh_permit_root_login: "no"
+    ssh_password_authentication: "no"
+  roles:
+    - role: opsforge.linux.ssh

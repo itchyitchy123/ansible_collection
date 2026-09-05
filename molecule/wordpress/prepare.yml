@@ -1,0 +1,32 @@
+---
+- name: Prepare WordPress role test
+  hosts: all
+  become: true
+  tasks:
+    - name: Create web-service test account
+      ansible.builtin.user:
+        name: "{{ 'www-data' if ansible_facts.os_family == 'Debian' else 'apache' }}"
+        system: true
+
+    - name: Create fixture source directory
+      ansible.builtin.file:
+        path: /tmp/wordpress-fixture
+        state: directory
+        mode: "0755"
+
+    - name: Create fixture WordPress entry point
+      ansible.builtin.copy:
+        content: "<?php // Molecule fixture\n"
+        dest: /tmp/wordpress-fixture/wp-settings.php
+        mode: "0644"
+
+    - name: Create fixture archive
+      ansible.builtin.command:
+        argv:
+          - tar
+          - -czf
+          - /tmp/wordpress-fixture.tar.gz
+          - -C
+          - /tmp
+          - wordpress-fixture
+        creates: /tmp/wordpress-fixture.tar.gz

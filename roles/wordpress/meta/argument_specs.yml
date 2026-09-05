@@ -1,0 +1,29 @@
+---
+argument_specs:
+  main:
+    short_description: Deploy a checksummed WordPress archive.
+    options:
+      wordpress_path:
+        type: str
+      wordpress_db_name:
+        type: str
+      wordpress_db_user:
+        type: str
+      wordpress_db_password:
+        type: str
+        no_log: true
+      wordpress_db_host:
+        type: str
+      wordpress_version:
+        type: str
+        required: true
+      wordpress_url:
+        type: str
+        required: true
+      wordpress_checksum:
+        type: str
+        required: true
+      wordpress_owner:
+        type: str
+      wordpress_group:
+        type: str

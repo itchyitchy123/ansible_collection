@@ -1,0 +1,8 @@
+---
+argument_specs:
+  main:
+    short_description: Install and enable Docker from approved OS repositories.
+    options:
+      docker_users:
+        type: list
+        elements: str

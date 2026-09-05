@@ -2,4 +2,10 @@ wordpress_path: /var/www/wordpress
 wordpress_db_name: wordpress
 wordpress_db_user: wordpress
 wordpress_db_password: change-me
-wordpress_url: https://wordpress.org/latest.tar.gz
+wordpress_db_host: localhost
+wordpress_version: ""
+wordpress_url: ""
+wordpress_checksum: ""
+wordpress_owner: "{{ 'www-data' if ansible_facts.os_family == 'Debian' else 'apache' }}"
+wordpress_group: "{{ 'www-data' if ansible_facts.os_family == 'Debian' else 'apache' }}"
+wordpress_version_marker: "{{ wordpress_path }}/.opsforge-wordpress-version"

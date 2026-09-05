@@ -1,0 +1,22 @@
+---
+- name: Verify WordPress role
+  hosts: all
+  become: true
+  tasks:
+    - name: Inspect WordPress configuration
+      ansible.builtin.stat:
+        path: /var/www/molecule-wordpress/wp-config.php
+      register: wordpress_config
+
+    - name: Read WordPress configuration
+      ansible.builtin.slurp:
+        src: /var/www/molecule-wordpress/wp-config.php
+      register: wordpress_config_contents
+
+    - name: Assert the versioned deployment is secure
+      ansible.builtin.assert:
+        that:
+          - wordpress_config.stat.exists
+          - wordpress_config.stat.mode == '0640'
+          - "wordpress_config.stat.pw_name == ('www-data' if ansible_facts.os_family == 'Debian' else 'apache')"
+          - "'database.internal' in (wordpress_config_contents.content | b64decode)"

@@ -1,27 +1,63 @@
 ---
 - name: Require a secure WordPress database password
   ansible.builtin.assert:
-    that: wordpress_db_password != 'change-me'
-    fail_msg: Set wordpress_db_password, preferably with Ansible Vault.
+    that:
+      - wordpress_db_password != 'change-me'
+      - wordpress_version | length > 0
+      - wordpress_url | length > 0
+      - wordpress_checksum | length > 0
+    fail_msg: >-
+      Set wordpress_db_password, wordpress_version, wordpress_url, and a
+      sha256 wordpress_checksum; store secrets in Ansible Vault.
 - name: Download WordPress
   ansible.builtin.get_url:
     url: "{{ wordpress_url }}"
     dest: /tmp/wordpress.tar.gz
+    checksum: "sha256:{{ wordpress_checksum }}"
     mode: "0644"
 - name: Create WordPress directory
   ansible.builtin.file:
     path: "{{ wordpress_path }}"
     state: directory
+    owner: "{{ wordpress_owner }}"
+    group: "{{ wordpress_group }}"
     mode: "0755"
+- name: Inspect deployed WordPress version
+  ansible.builtin.stat:
+    path: "{{ wordpress_version_marker }}"
+  register: wordpress_version_marker_stat
+- name: Read deployed WordPress version
+  ansible.builtin.slurp:
+    src: "{{ wordpress_version_marker }}"
+  register: wordpress_installed_version
+  when: wordpress_version_marker_stat.stat.exists
 - name: Extract WordPress
   ansible.builtin.unarchive:
     src: /tmp/wordpress.tar.gz
     dest: "{{ wordpress_path }}"
     remote_src: true
     extra_opts: [--strip-components=1]
-    creates: "{{ wordpress_path }}/wp-settings.php"
+  when: >-
+    not wordpress_version_marker_stat.stat.exists or
+    (wordpress_installed_version.content | b64decode | trim) != wordpress_version
+- name: Record deployed WordPress version
+  ansible.builtin.copy:
+    content: "{{ wordpress_version }}\n"
+    dest: "{{ wordpress_version_marker }}"
+    owner: "{{ wordpress_owner }}"
+    group: "{{ wordpress_group }}"
+    mode: "0644"
+- name: Set WordPress ownership
+  ansible.builtin.file:
+    path: "{{ wordpress_path }}"
+    owner: "{{ wordpress_owner }}"
+    group: "{{ wordpress_group }}"
+    recurse: true
 - name: Configure WordPress
   ansible.builtin.template:
     src: wp-config.php.j2
     dest: "{{ wordpress_path }}/wp-config.php"
+    owner: "{{ wordpress_owner }}"
+    group: "{{ wordpress_group }}"
     mode: "0640"
+  no_log: true

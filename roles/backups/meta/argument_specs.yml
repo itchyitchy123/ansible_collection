@@ -1,0 +1,14 @@
+---
+argument_specs:
+  main:
+    short_description: Install a local tar backup job.
+    options:
+      backup_sources:
+        type: list
+        elements: str
+      backup_destination:
+        type: str
+      backup_schedule:
+        type: str
+      backup_retention_days:
+        type: int

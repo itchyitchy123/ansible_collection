@@ -1,4 +1,8 @@
 ---
+- name: Install cron scheduler
+  ansible.builtin.package:
+    name: "{{ 'cron' if ansible_facts.os_family == 'Debian' else 'cronie' }}"
+    state: present
 - name: Create backup destination
   ansible.builtin.file:
     path: "{{ backup_destination }}"

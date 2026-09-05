@@ -1,0 +1,13 @@
+---
+argument_specs:
+  main:
+    short_description: Install and safely harden the SSH server.
+    options:
+      ssh_port:
+        type: int
+      ssh_permit_root_login:
+        type: str
+      ssh_password_authentication:
+        type: str
+      ssh_hardening_confirmed:
+        type: bool
